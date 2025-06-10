@@ -174,17 +174,11 @@ scripts/
 
 - train_word2vec.py # Train and save Word2Vec model
 
-- model.py # Word2Vec hyperparameter configuration
+- main.ipynb # Main end-to-end notebook pipeline
 
+- requirements.txt # Project dependencies
 
-main.ipynb # Main end-to-end notebook pipeline
-
-requirements.txt # Project dependencies
-
-setup.py # (Optional) Setup for pip install
-
-
----
+- setup.py # (Optional) Setup for pip install
 
  
  ---
