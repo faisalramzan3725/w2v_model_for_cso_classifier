@@ -91,18 +91,21 @@ Step 6: Topic Modeling or Downstream Tasks
 ---
 
 ## Pseudo Code:
+
       
     Step 1: Load and Preprocess CSO Concepts
     
       cso_labels = load_ttl("cso.ttl")
       
       cso_labels = [clean_text(label) for label in cso_labels]
+      
     
     Step 2: Load and Preprocess Paper Dataset
       
       titles, abstracts = load_paper_dataset("papers.txt")
       
       documents = preprocess_documents(titles + abstracts)
+      
     
     Step 3: Match and Replace CSO Concepts in Documents
     
@@ -123,6 +126,7 @@ Step 6: Topic Modeling or Downstream Tasks
           for i, doc in enumerate(processed_docs):
               if phrase in doc:
                   processed_docs[i] = doc.replace(phrase, phrase.replace(" ", "_"))
+                  
     
     Step 5: Train Word2Vec Model
     
@@ -131,6 +135,7 @@ Step 6: Topic Modeling or Downstream Tasks
       model = train_word2vec(tokenized_docs)
       
       save_model(model, "scientific_embeddings.model")
+      
     
     Step 6: Use Embeddings for Topic Modeling or Search etc..
 
