@@ -170,8 +170,10 @@ Step 6: Topic Modeling or Downstream Tasks
 
 - processed_title_abstract_v2.csv # Output after CSO + trigram processing
 
+--- 
 
-Files and Descriptions
+## Files and Descriptions
+
 1_cso_script.py:
 Extracts concepts from the CSO ontology to prepare a list of topics for downstream processing. This script serves as the foundation for identifying relevant terms in the dataset.
 
