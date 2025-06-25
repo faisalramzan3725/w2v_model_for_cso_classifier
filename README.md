@@ -171,19 +171,38 @@ Step 6: Topic Modeling or Downstream Tasks
 - processed_title_abstract_v2.csv # Output after CSO + trigram processing
 
 
-scripts/
+Files and Descriptions
+1_cso_script.py
+Extracts concepts from the CSO ontology to prepare a list of topics for downstream processing. This script serves as the foundation for identifying relevant terms in the dataset.
 
-- cso_script.py # Extract concepts from CSO ontology
+2_paper_dataset.py
+Loads the initial dataset (e.g., CSV files with titles and abstracts) and filters the columns to retain only the necessary data (e.g., titles and abstracts), ensuring compatibility with subsequent steps.
 
-- concept_find_replace.py # Text preprocessing, concept replacement, n-gram generation
+3_dataset_partitions.py
+Partitions the large dataset files into manageable chunks based on total lines and memory affordance. This step splits the data into multiple files (e.g., abstracts_part_v1_X.txt) for parallel processing.
 
-- train_word2vec.py # Train and save Word2Vec model
+4_clean_data.py
+Performs preprocessing and cleaning of the partitioned data, replacing space-containing CSO topics with underscore versions (e.g., machine learning → machine_learning) and normalizing text artifacts.
 
-- main.ipynb # Main end-to-end notebook pipeline
+5_strip_tokens.py
+Strips and processes each sentence into tokenized forms, splitting on spaces and removing punctuation. The output is saved as JSON files (e.g., abstracts_filtered_striped_part_v1_X.txt) for further analysis.
 
-- requirements.txt # Project dependencies
+6_bigrams_trigrams.py
+Identifies bigrams and trigrams from the tokenized data using the Gensim library. The results are saved as separate files (e.g., abstracts_bigrams_part_v1_X.txt and abstracts_trigrams_part_v1_X.txt).
 
-- setup.py # (Optional) Setup for pip install
+7_w2v_model.py
+Configures and trains a Word2Vec model on the trigram-processed sentences. The trained model is saved as a binary file (e.g., 9M[256-10]_sg.bin) with customizable parameters like vector size and window.
+
+pipeline.py
+Orchestrates the complete workflow, executing steps 1 through 7 sequentially. This file manages the end-to-end process from data loading to model training, with logging for monitoring.
+
+requirements.txt
+Lists all project dependencies (e.g., pandas, langdetect, gensim) required to run the scripts. Use pip install -r requirements.txt to install them.
+
+setup.py (Optional)
+Provides a setup script for installing the project as a Python package via pip install .. This is optional and can be used for local development or distribution.
+
+
 
  
  ---
