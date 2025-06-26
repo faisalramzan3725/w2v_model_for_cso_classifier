@@ -1,64 +1,5 @@
 import logging
 import os
-
-# Setup logging
-logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
-
-def file_len(file_path):
-    with open(file_path, 'r', encoding='utf-8') as f:
-        return sum(1 for _ in f)
-
-def main_split():
-    input_file_path = os.path.join("paper_dataset", "abstracts_v1.txt")
-    if not os.path.exists(input_file_path):
-        raise FileNotFoundError(f"{input_file_path} not found")
-
-    # Count total lines
-    total_lines = file_len(input_file_path)
-    #print(total_lines)
-    total_pairs = total_lines // 2  # Each pair is title + abstract (2 lines)
-    pairs_per_part = total_pairs // 4
-    logging.info(f"Total lines: {total_lines}, Total pairs: {total_pairs}, Pairs per part: {pairs_per_part}")
-
-    # Prepare output files
-    output_files = [
-        open(os.path.join("paper_dataset", f"abstracts_part_v1_{i+1}.txt"), "w+", encoding="utf-8")
-        for i in range(4)
-    ]
-    preview_lines = [[] for _ in range(4)]
-
-    # Split lines by pairs
-    with open(input_file_path, encoding="utf-8") as infile:
-        lines = infile.readlines()  # Read all lines to process in pairs
-        for i in range(0, total_lines, 2):  # Iterate over pairs
-            if i // 2 >= total_pairs:
-                break
-            part = min((i // 2) // pairs_per_part, 3)  # Assign pair to part
-            title = lines[i].strip()
-            abstract = lines[i + 1].strip()
-            output_files[part].write(f"{title}{abstract}\n")  # Write title and abstract consecutively with one newline
-            if len(preview_lines[part]) < 2:  # Preview first two lines (one pair)
-                preview_lines[part].append(f"{title}{abstract}")
-
-    # Close output files
-    for f in output_files:
-        f.close()
-
-    # Print preview
-    for i, lines in enumerate(preview_lines, 1):
-        print(f"\n--- Test Set: Split Part {i} ---")
-        for j, line in enumerate(lines, 1):
-            print(f"Line {j}: {line}")
-
-    logging.info("Partitioning complete.")
-
-if __name__ == "__main__":
-    main_split()
-
-
-    '''
-import logging
-import os
 import math
 
 # Assuming file_len is defined elsewhere; if not, define it
@@ -82,7 +23,7 @@ def main_split():
     total_pairs = total_lines // 2  # Each pair is title + abstract (2 lines)
 
     # Define affordance: max lines per part (tune based on system memory)
-    affordance = 250  # Maximum lines per partition; adjust based on dataset and memory
+    affordance = 25000  # Maximum lines per partition; adjust based on dataset and memory
 
     # Compute number of parts based on affordance and total lines
     num_parts = max(4, math.ceil(total_lines / affordance))  # Ensure at least 4 parts
@@ -134,5 +75,3 @@ def main_split():
 
 if __name__ == "__main__":
     main_split()
-
-'''

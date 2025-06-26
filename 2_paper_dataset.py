@@ -1,4 +1,3 @@
-# paper_dataset.py
 import logging
 import pandas as pd
 import os
@@ -20,7 +19,7 @@ def process_papers_to_txt(file, df):
 def main_load_papers():
     logger.info('Started processing papers')
 
-    csv_path = os.path.join('paper_dataset', 'paper_dataset_1k.csv')
+    csv_path = os.path.join('paper_dataset', 'paper_dataset_10k.csv')
     
     # Load CSV
     try:

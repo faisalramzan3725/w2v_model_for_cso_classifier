@@ -11,7 +11,7 @@ logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=lo
 MODEL_NAME = '9M'  # model name
 SIZE = 256  # size of embedding for output
 WINDOW = 10  # max distance between the current and predicted words
-MIN_COUNT = 1  # Reduced for sample data, frequency of word appearance, 1 or 10 etc
+MIN_COUNT = 10  # Reduced for sample data, frequency of word appearance, 1 or 10 etc
 
 def read(file_path):
     """
@@ -78,14 +78,14 @@ def main_word2vec():
             vector_size=SIZE,
             window=WINDOW,
             min_count=MIN_COUNT,
-            sg=1,
+            sg=1, 
             workers=4  # Adjust based on your CPU
         )
     except Exception as e:
         logging.error(f"Error training Word2Vec model: {e}")
         print(f"Error training model: {e}")
         return
-
+    '''
     print("\n--- Test Set: Sample Word Vectors ---")
     try:
         sample_words = ['machine_learning', 'neural_network', 'artificial_intelligence']
@@ -98,7 +98,7 @@ def main_word2vec():
     except Exception as e:
         logging.error(f"Error printing vectors: {e}")
         print(f"Error printing vectors: {e}")
-
+        '''
     print("\n-------------------------------------\nSaving model...")
     output_file = f"{MODEL_NAME}[{SIZE}-{WINDOW}]_sg.bin"
     try:
