@@ -1,4 +1,3 @@
-# extract_cso.py
 import re
 import csv
 import os
