@@ -1,0 +1,11 @@
+python==3.11
+gensim==4.3.3
+nltk==3.9.1
+simplejson==3.20.1
+numpy==1.26.4
+pandas==2.2.3
+scikit-learn==1.6.1
+scipy==1.13.1
+matplotlib==3.10.3
+jupyter==1.0.0
+ipython==9.2.0
