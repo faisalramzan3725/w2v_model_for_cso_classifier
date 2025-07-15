@@ -257,7 +257,7 @@ Repository: https://github.com/faisalramzan3725/w2v_model_for_cso_classifier
 ### 1. Clone the Repository
 
 bash
-git clone https://github.com/yourusername/kmi_project_cso.git
+git clone https://github.com/yourusername/w2v_model_for_cso_classifier.git
 
 cd kmi_project_cso
 
