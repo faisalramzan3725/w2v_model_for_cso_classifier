@@ -17,33 +17,32 @@ Step 1: Download and Preprocess CSO Concepts
 
   1.1 Download the CSO ontology .ttl (Turtle) file, which contains structured computer science concepts.
   
-  1.2 Extract all concept labels from the file using an RDF parser (e.g., rdflib in Python).
+  1.2 Extract all concept labels using an RDF parser (e.g., rdflib in Python).
   
-  1.3 Preprocess the labels (If required):
-
-  - Convert to lowercase
-    
-  - Remove extra spaces or symbols
-    
-  - Keep the concept phrases as-is (e.g., "computer science")
+  1.3 Preprocess the concept labels:
+  
+  Convert to lowercase
+  
+  Remove extra spaces or special characters
+  
+  Keep multi-word terms as-is (e.g., "computer science")
     
 
 Step 2: Download and Preprocess the Paper Dataset
 
-  2.1 Download the full Semantic Scholar dataset or a custom dump.
+  2.1 Download the full Semantic Scholar Open Research Corpus or a custom dataset.
   
-  2.2 Parse the dataset to create a list of documents, where each document consists of:
+  2.2 Parse each paper to extract:
   
-  - Title
-  - Abstract
-  - Title
-  - Abstract
-
+  Title
+  
+  Abstract
+  
   2.3 Preprocess each document:
-
-  - Convert text to lowercase
   
-  - Remove or normalize special characters, punctuation, or extra whitespace
+  Convert text to lowercase
+  
+  Normalize special characters, punctuation, and whitespace
 
 Step 3: Concept Matching with NLTK or Gensim
 
@@ -76,12 +75,32 @@ Step 5: Train Embedding Model
   
   5.2 The model will learn vector embeddings where similar scientific terms are close in vector space.
 
-Step 6: Topic Modeling or Downstream Tasks
+Step 6: Load Updated CSO Concepts from CSO Reader
 
-  6.1 The trained Word2Vec model can now be used for:
+  6.1 Load all updated concepts from the CSO Reader utility.
+
+Step 7: Extend Word2Vec Model Vocabulary
+
+  7.1 For each word in the model vocabulary:
+  
+  - Retrieve semantically similar terms using most_similar() with a similarity threshold.
+  
+  7.2 Compare retrieved terms against CSO concepts using Levenshtein similarity (via rapidfuzz).
+  
+  7.3 If similarity exceeds a threshold:
+  
+  - Link the word to relevant CSO concepts
+  
+  - Cache the result to avoid recomputation
+  
+  7.4 Save the final cached model with all matched terms.
+
+Step 8: Topic Modeling or Downstream Tasks
+
+  8.1 The final trained Word2Vec model can be used for a range of downstream applications:
   
   - Topic modeling
-  
+   
   - Semantic clustering
   
   - Recommendation systems
