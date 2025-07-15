@@ -9,16 +9,29 @@ logger = logging.getLogger(__name__)
 
 def extract_cso_concepts(ttl_path: str, save_csv: bool = True, csv_path: str = "cso_label/concepts.csv") -> list:
     """
-    Extract unique CSO concept labels from a TTL file and save them to CSV.
+    Extracts concept labels from a TTL file containing CSO (Computer Science Ontology) data.
+
+    This function reads a TTL file, extracts concept labels using regex pattern matching,
+    and optionally saves the unique labels to a CSV file.
 
     Args:
-        ttl_path (str): Path to the TTL file.
-        save_csv (bool): Whether to save the results to CSV.
-        csv_path (str): Path for the CSV output.
+        ttl_path (str): Path to the TTL file containing CSO data
+        save_csv (bool, optional): Whether to save extracted labels to CSV. Defaults to True.
+        csv_path (str, optional): Path where CSV file will be saved. Defaults to "cso_label/concepts.csv".
 
     Returns:
-        list: List of unique CSO concept labels.
+        list: A list of unique concept labels extracted from the TTL file.
+
+    Raises:
+        FileNotFoundError: If the specified TTL file does not exist
+        Exception: For other errors during file processing or CSV saving
+
+    Example:
+        >>> labels = extract_cso_concepts("path/to/CSO.ttl")
+        >>> print(len(labels))
+        14000
     """
+
     try:
         if not os.path.exists(ttl_path):
             raise FileNotFoundError(f"TTL file not found: {ttl_path}")

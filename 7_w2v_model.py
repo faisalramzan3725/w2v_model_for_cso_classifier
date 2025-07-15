@@ -13,9 +13,24 @@ SIZE = 256  # size of embedding for output
 WINDOW = 10  # max distance between the current and predicted words
 MIN_COUNT = 10  # Reduced for sample data, frequency of word appearance, 1 or 10 etc
 
-def read(file_path):
+def read(file_path:str)->list:
     """
     Read tokenized sentences from a JSON file.
+
+    This function reads a JSON file containing tokenized sentences, where each line
+    represents a separate JSON object containing a tokenized sentence.
+
+    Args:
+        file_path (str): Path to the JSON file containing tokenized sentences
+
+    Returns:
+        list: A list of tokenized sentences. Returns an empty list if file is not found
+            or if there are errors reading the file.
+
+    Note:
+        - Each line in the input file should be a valid JSON object
+        - Invalid JSON lines are skipped with a warning
+        - Uses UTF-8 encoding for reading the file
     """
     logging.info(f"Reading {file_path}")
     sentences = []
@@ -32,9 +47,32 @@ def read(file_path):
         logging.warning(f"{file_path} not found. Skipping.")
         return []
 
-def main_word2vec():
+def main_word2vec()->None:
     """
-    Train a Word2Vec model on trigram-processed sentences.
+    Train a Word2Vec model on sentences.
+
+    This function loads trigram-processed sentences from text files and trains a Word2Vec model
+    using the skip-gram algorithm. The model learns vector representations (embeddings) of words
+    based on their context in the sentences.
+
+    The function:
+    1. Loads trigram files from the paper_dataset directory
+    2. Processes and combines all sentences
+    3. Trains a Word2Vec model with specified parameters:
+        - vector_size: Dimension of word vectors
+        - window: Maximum distance between current and predicted word
+        - min_count: Minimum frequency of words to include
+        - sg=1: Uses skip-gram algorithm
+    4. Saves the trained model in binary format
+
+    Global Parameters Used:
+        MODEL_NAME: Name identifier for the model
+        SIZE: Dimension of word vectors
+        WINDOW: Context window size
+        MIN_COUNT: Minimum word frequency threshold
+
+    Returns:
+        None: The function saves the model to disk but doesn't return any values
     """
     logging.info("Started training Word2Vec model")
     print("Loading data ... ")

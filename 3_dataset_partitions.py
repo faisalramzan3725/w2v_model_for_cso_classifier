@@ -3,12 +3,52 @@ import os
 import math
 
 # Assuming file_len is defined elsewhere; if not, define it
-def file_len(file_path):
+def file_len(file_path: str) -> int:
     """Count the number of lines in a file."""
     with open(file_path, 'r', encoding='utf-8') as f:
         return sum(1 for _ in f)
 
-def main_split():
+def main_split()->None:
+    """
+    Dataset Partitioning Script
+
+    This script partitions a large dataset of paper abstracts into smaller, manageable chunks
+    while preserving title-abstract pairs. It implements memory-efficient processing by reading
+    and writing data incrementally.
+
+    Key Features:
+    - Splits dataset based on system memory constraints (affordance)
+    - Preserves title-abstract pair relationships
+    - Provides progress logging and preview samples
+    - Handles large files through incremental processing
+
+    Input:
+    - A text file containing alternating lines of paper titles and abstracts
+    - File path expected: paper_dataset/abstracts_v1.txt
+
+    Output: 
+    - Multiple text files named 'abstracts_part_v1_N.txt' where N is the partition number
+    - Each output file contains complete title-abstract pairs
+    - Files are written to the same directory as input
+
+    Memory Management:
+    - Uses a configurable 'affordance' parameter to control memory usage
+    - Default affordance: 25000 lines per partition
+    - Minimum of 4 partitions regardless of file size
+
+    Error Handling:
+    - Checks for input file existence
+    - Validates pair completeness during processing
+    - Handles end-of-file conditions appropriately
+
+    Usage:
+        Run directly: python 3_dataset_partitions.py
+        Import and call: main_split()
+
+    Dependencies:
+        - Python 3.x
+        - Standard libraries: os, math, logging
+    """
     # Setup logging
     logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
     logger = logging.getLogger(__name__)
@@ -23,7 +63,7 @@ def main_split():
     total_pairs = total_lines // 2  # Each pair is title + abstract (2 lines)
 
     # Define affordance: max lines per part (tune based on system memory)
-    affordance = 25000  # Maximum lines per partition; adjust based on dataset and memory
+    affordance = 250000  # Maximum lines per partition; adjust based on dataset and memory
 
     # Compute number of parts based on affordance and total lines
     num_parts = max(4, math.ceil(total_lines / affordance))  # Ensure at least 4 parts

@@ -1,12 +1,28 @@
 import logging
+from pickle import NONE
 import pandas as pd
 import re
 import os
 import glob
 
-def get_space_topics():
+def get_space_topics()->tuple[list[str],dict[str,str]]:
     """
-    Load CSO concepts and prepare replacements for space-containing topics.
+    Retrieves space-related topics and their substitutions from a CSO (Computer Science Ontology) file.
+
+    This function reads a CSV file containing CSO concepts and creates:
+    1. A list of unique topic labels in lowercase
+    2. A dictionary mapping multi-word topics to their underscore-separated versions
+
+    Returns:
+        tuple[list[str], dict[str,str]]: A tuple containing:
+            - list[str]: Sorted list of unique topic labels
+            - dict[str,str]: Dictionary mapping original topics to underscore versions
+                            (only for topics containing spaces)
+
+    Example:
+        topics, substitutions = get_space_topics()
+        # topics = ['machine learning', 'ai', ...]
+        # substitutions = {'machine learning': 'machine_learning', ...}
     """
     cso_df = pd.read_csv('cso_label/concepts.csv')
     substitutions = {}
@@ -20,9 +36,32 @@ def get_space_topics():
             substitutions[topic] = topic.replace(" ", "_")
     return topics, substitutions
 
-def process_line(line, topics, substitutions):
+def process_line(line, topics, substitutions)->tuple[str,list[str]]:
     """
-    Normalize text, replace CSO topics with underscore versions, and clean artifacts.
+    Process a line of text by cleaning and replacing space-related topics.
+
+    This function performs several text processing steps:
+    1. Normalizes Unicode characters and special characters
+    2. Replaces space-related topics with their underscore versions
+    3. Handles malformed newline artifacts
+
+    Args:
+        line (str): The input text line to process
+        topics (list[str]): List of space-related topics to look for
+        substitutions (dict[str,str]): Dictionary mapping topics to their underscore versions
+
+    Returns:
+        tuple[str,list[str]]: A tuple containing:
+            - str: The processed text line
+            - list[str]: List of topics that were replaced in the line
+
+    Example:
+        line = "Research on machine learning and AI"
+        topics = ["machine learning", "ai"]
+        subs = {"machine learning": "machine_learning"}
+        new_line, changed = process_line(line, topics, subs)
+        # new_line = "Research on machine_learning and AI"
+        # changed = ["machine learning"]
     """
     # Step 1: Normalize Unicode escapes and special characters
     line = line.encode().decode('utf-8', errors='ignore')  # Handle invalid Unicode
@@ -45,9 +84,25 @@ def process_line(line, topics, substitutions):
 
     return line, to_change
 
-def process_file(input_file, output_file):
+def process_file(input_file, output_file)->None:
     """
-    Process a single text file and write the cleaned version.
+    Process a text file by replacing space-related topics with their underscore versions.
+
+    This function reads an input file line by line, processes each line using the
+    process_line() function, and writes the processed lines to an output file.
+    It also collects sample changes to demonstrate the transformations performed.
+
+    Args:
+        input_file (str): Path to the input text file to process
+        output_file (str): Path where the processed output will be written
+
+    Returns:
+        None
+
+    Example:
+        process_file("input.txt", "output.txt")
+        # Processes input.txt and writes cleaned text to output.txt
+        # Also prints sample transformations showing before/after changes
     """
     logging.info(f"Processing {input_file}")
     topics, substitutions = get_space_topics()
@@ -75,9 +130,29 @@ def process_file(input_file, output_file):
         print(f"After:  {after}")
         print(f"Concepts Replaced: {', '.join(topics)}")
 
-def main_glue():
+def main_glue()->None:
     """
-    Main function to process all abstract parts dynamically.
+    Main function to process multiple text files containing paper abstracts.
+
+    This function:
+    1. Sets up logging configuration
+    2. Finds all abstract partition files matching the pattern "abstracts_part_v1_*.txt"
+    3. For each partition file:
+        - Creates a corresponding output filename
+        - Processes the file using process_file() if it exists
+        - Logs warnings for missing files
+
+    The function processes large datasets split into multiple files, cleaning and
+    standardizing the text while replacing space-separated topics with underscore versions.
+
+    Returns:
+        None
+
+    Example:
+        main_glue()
+        # Processes all partition files in paper_dataset directory
+        # Creates corresponding filtered output files
+        # Logs progress and any warnings
     """
     logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
     base_dir = "paper_dataset"

@@ -1,4 +1,3 @@
-# pipeline.py
 import logging
 import os
 import importlib.util
@@ -15,7 +14,21 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 def import_module(module_name, file_path):
-    """Dynamically import a module from a file path."""
+    """Import a Python module from a file path dynamically.
+
+    This function imports a Python module from a specified file path using the importlib
+    functionality. It allows for dynamic loading of modules at runtime.
+
+    Args:
+        module_name (str): The name to give to the imported module
+        file_path (str): The file system path to the Python module to import
+
+    Returns:
+        module: The imported Python module object
+
+    Raises:
+        FileNotFoundError: If the specified module file path does not exist
+    """
     if not os.path.exists(file_path):
         logger.error(f"Module file {file_path} not found")
         raise FileNotFoundError(f"Module file {file_path} not found")
@@ -25,7 +38,32 @@ def import_module(module_name, file_path):
     spec.loader.exec_module(module)
     return module
 
-def run_pipeline():
+def run_pipeline()->None:
+    """Execute a multi-step data processing pipeline.
+
+    This function orchestrates a sequence of data processing steps for analyzing academic papers:
+    1. Extract CSO (Computer Science Ontology) concepts
+    2. Process paper dataset
+    3. Partition paper abstracts
+    4. Clean the data
+    5. Strip tokens
+    6. Generate bigrams and trigrams
+    7. Train Word2Vec model
+    8. Cache Word2Vec similarities with CSO ontology
+
+    The function:
+    - Imports and executes each processing step module dynamically
+    - Measures and logs execution time for each step
+    - Handles errors for individual steps without stopping the pipeline
+    - Identifies and logs the most time-consuming step
+    - Maintains detailed logging throughout execution
+
+    Returns:
+        None
+
+    Raises:
+        No exceptions are raised as each step handles its own exceptions
+    """
     logger.info("Starting pipeline execution")
     execution_times = {}  # Dictionary to store execution times for each step
 
@@ -105,6 +143,18 @@ def run_pipeline():
         logger.error(f"Error in Step 7: {e}")
     execution_times["Step 7"] = time.time() - start_time
     logger.info(f"Step 7 completed in {execution_times['Step 7']:.2f} seconds")
+
+        # Step 8: Cache Word2Vec similarities with CSO ontology
+    logger.info("Step 8: Caching Word2Vec model with CSO ontology")
+    start_time = time.time()
+    try:
+        cache_module = import_module("caching_word2vec_model", "8_caching_word2vec_model.py")
+        cache_module.main()  # assuming you wrap your code in a main() function
+    except Exception as e:
+        logger.error(f"Error in Step 8: {e}")
+    execution_times["Step 8"] = time.time() - start_time
+    logger.info(f"Step 8 completed in {execution_times['Step 8']:.2f} seconds")
+
 
     # Find and log the step with maximum execution time
     max_step = max(execution_times, key=execution_times.get)

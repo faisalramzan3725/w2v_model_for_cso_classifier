@@ -6,7 +6,27 @@ import os
 logging.basicConfig(filename='myapp.log', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-def process_papers_to_txt(file, df):
+def process_papers_to_txt(file, df)->None:
+    """
+    Process papers from a DataFrame and write titles and abstracts to a text file.
+
+    This function takes a DataFrame containing paper metadata and writes the titles
+    and abstracts to a text file, with each title and abstract on separate lines.
+    The function handles basic text cleaning like removing newlines and stripping
+    whitespace.
+
+    Args:
+        file: A file object opened in write mode where the output will be written
+        df (pd.DataFrame): DataFrame containing paper metadata with 'title' and 
+            'abstract' columns
+
+    Returns:
+        None: The function writes directly to the provided file object
+
+    Raises:
+        Exception: If there are errors processing individual papers, they are
+            logged but don't stop the overall processing
+    """
     for _, row in df.iterrows():
         try:
             title = str(row['title']).replace('\n', ' ').strip()
@@ -16,7 +36,21 @@ def process_papers_to_txt(file, df):
         except Exception as e:
             logger.info(f"Error processing paper {row.get('id', 'unknown')}: {e}")
 
-def main_load_papers():
+def main_load_papers()->None:
+    """
+    Load and process paper dataset.
+    This function reads a CSV file containing paper metadata, filters it for English abstracts,
+    and writes the titles and abstracts to a TXT file.
+    The function:
+    1. Loads a CSV file from 'paper_dataset' directory
+    2. Filters for papers with English abstracts
+    3. Writes titles and abstracts to 'abstracts_v1.txt'
+    4. Saves a CSV file with titles and abstracts
+    Global Parameters Used:
+    - None: The function reads and writes files, doesn't use global variables
+    Returns:
+    - None: The function writes to disk but doesn't return any data
+    """
     logger.info('Started processing papers')
 
     csv_path = os.path.join('paper_dataset', 'paper_dataset_10k.csv')
