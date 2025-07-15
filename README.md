@@ -232,6 +232,21 @@ This Python script implements a comprehensive data processing pipeline for analy
 requirements.txt: All project dependencies (e.g., pandas, langdetect, gensim) required to run the scripts. Use pip install -r requirements.txt to install them.
 
 
+setup.py: This setup.py file configures a Python package named 'w2v_model_for_cso_classifier' (version 0.1.0) that processes academic papers using the Computer Science Ontology (CSO).
+
+Dependencies:
+
+- Machine Learning: gensim, scikit-learn, numpy, pandas
+- NLP: nltk
+- Data Processing: scipy, simplejson
+- Visualization: matplotlib
+- Development: jupyter, ipython
+
+The package requires Python 3.11 and is distributed under MIT License.
+
+Author: Faisal Ramzan (faisal.ramzan@unica.it)
+
+Repository: https://github.com/faisalramzan3725/w2v_model_for_cso_classifier
  
  ---
 
