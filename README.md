@@ -213,32 +213,21 @@ Pipeline.py - Data Processing Pipeline for Academic Papers Analysis
 
 This Python script implements a comprehensive data processing pipeline for analyzing academic papers. The pipeline consists of 8 main steps:
 
-Key Components:
-
-1. Logging Configuration:
-   - Custom formatted logging to 'myapp.log'
-   - Includes timestamp, log level, and messages
-   
-2. Dynamic Module Import:
-   - Custom import_module() function for dynamic loading of Python modules
-   - Handles file path validation and module loading
-
-3. Main Pipeline Steps:
    a. CSO Concept Extraction (Step 1)
+   
    b. Paper Dataset Processing (Step 2) 
+   
    c. Abstract Partitioning (Step 3)
+   
    d. Data Cleaning (Step 4)
+   
    e. Token Stripping (Step 5)
+   
    f. Bigram/Trigram Generation (Step 6)
+   
    g. Word2Vec Model Training (Step 7)
+   
    h. Word2Vec-CSO Similarity Caching (Step 8)
-
-4. Performance Monitoring:
-   - Execution time tracking for each step
-   - Identification of most time-consuming step
-   - Comprehensive error handling and logging
-
-
 
 requirements.txt: All project dependencies (e.g., pandas, langdetect, gensim) required to run the scripts. Use pip install -r requirements.txt to install them.
 
