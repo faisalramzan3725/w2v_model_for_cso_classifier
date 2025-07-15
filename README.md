@@ -21,11 +21,11 @@ Step 1: Download and Preprocess CSO Concepts
   
   1.3 Preprocess the concept labels:
   
-  Convert to lowercase
+  - Convert to lowercase
   
-  Remove extra spaces or special characters
+  - Remove extra spaces or special characters
   
-  Keep multi-word terms as-is (e.g., "computer science")
+  - Keep multi-word terms as-is (e.g., "computer science")
     
 
 Step 2: Download and Preprocess the Paper Dataset
@@ -34,15 +34,15 @@ Step 2: Download and Preprocess the Paper Dataset
   
   2.2 Parse each paper to extract:
   
-  Title
+   - Title
   
-  Abstract
+  - Abstract
   
   2.3 Preprocess each document:
   
-  Convert text to lowercase
+  - Convert text to lowercase
   
-  Normalize special characters, punctuation, and whitespace
+  - Normalize special characters, punctuation, and whitespace
 
 Step 3: Concept Matching with NLTK or Gensim
 
@@ -54,7 +54,7 @@ Step 3: Concept Matching with NLTK or Gensim
 
 - Replace the matched phrase with an underscore-separated version (e.g., "computer science" → "computer_science")
 
- Note: This keeps multi-word terms as a single token for training
+- Note: This keeps multi-word terms as a single token for training
 
   Example: CSO Concepts:
   ["computer science", "web", "information retrieval", "large language models"]
