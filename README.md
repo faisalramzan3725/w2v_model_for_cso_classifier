@@ -1,4 +1,4 @@
-# kmi_cso_upgradation
+# w2v_model_for_cso_classifier
 # 🧠 CSO Concept Embedding Workflow Pipeline
 
 This project leverages the [Computer Science Ontology (CSO)](https://cso.kmi.open.ac.uk/) to process academic paper metadata, identify key research topics, and generate word embeddings using Word2Vec for semantic analysis and downstream NLP tasks.
