@@ -43,13 +43,12 @@ def run_pipeline()->None:
 
     This function orchestrates a sequence of data processing steps for analyzing academic papers:
     1. Extract CSO (Computer Science Ontology) concepts
-    2. Process paper dataset
-    3. Partition paper abstracts
-    4. Clean the data
-    5. Strip tokens
-    6. Generate bigrams and trigrams
-    7. Train Word2Vec model
-    8. Cache Word2Vec similarities with CSO ontology
+    2. Partition paper abstracts
+    3. Clean the data
+    4. Strip tokens
+    5. Generate bigrams and trigrams
+    6. Train Word2Vec model
+    7. Cache Word2Vec similarities with CSO ontology
 
     The function:
     - Imports and executes each processing step module dynamically
@@ -77,7 +76,7 @@ def run_pipeline()->None:
         logger.error(f"Error in Step 1: {e}")
     execution_times["Step 1"] = time.time() - start_time
     logger.info(f"Step 1 completed in {execution_times['Step 1']:.2f} seconds")
-
+    """
     # Step 2: Process paper dataset
     logger.info("Step 2: Processing paper dataset")
     start_time = time.time()
@@ -88,72 +87,73 @@ def run_pipeline()->None:
         logger.error(f"Error in Step 2: {e}")
     execution_times["Step 2"] = time.time() - start_time
     logger.info(f"Step 2 completed in {execution_times['Step 2']:.2f} seconds")
+"""
 
     # Step 3: Partition abstracts into parts
-    logger.info("Step 3: Partitioning abstracts")
+    logger.info("Step 2: Partitioning abstracts")
     start_time = time.time()
     try:
-        partitions_module = import_module("dataset_partitions", "3_dataset_partitions.py")
+        partitions_module = import_module("dataset_partitions", "2_dataset_partitions.py")
         partitions_module.main_split()  # Assuming main function name
+    except Exception as e:
+        logger.error(f"Error in Step 2: {e}")
+    execution_times["Step 2"] = time.time() - start_time
+    logger.info(f"Step 2 completed in {execution_times['Step 2']:.2f} seconds")
+
+    # Step 4: Clean data
+    logger.info("Step 3: Cleaning data")
+    start_time = time.time()
+    try:
+        clean_module = import_module("clean_data", "3_clean_data.py")
+        clean_module.main_glue()
     except Exception as e:
         logger.error(f"Error in Step 3: {e}")
     execution_times["Step 3"] = time.time() - start_time
     logger.info(f"Step 3 completed in {execution_times['Step 3']:.2f} seconds")
 
-    # Step 4: Clean data
-    logger.info("Step 4: Cleaning data")
+    # Step 5: Strip token data
+    logger.info("Step 4: Strip token data")
     start_time = time.time()
     try:
-        clean_module = import_module("clean_data", "4_clean_data.py")
-        clean_module.main_glue()
+        tokens_module = import_module("strip_tokens", "4_strip_tokens.py")
+        tokens_module.main_strip()  # Assuming main function name
     except Exception as e:
         logger.error(f"Error in Step 4: {e}")
     execution_times["Step 4"] = time.time() - start_time
     logger.info(f"Step 4 completed in {execution_times['Step 4']:.2f} seconds")
 
-    # Step 5: Strip token data
-    logger.info("Step 5: Strip token data")
+    # Step 6: Generate bigrams and trigrams
+    logger.info("Step 5: Generating bigrams and trigrams")
     start_time = time.time()
     try:
-        tokens_module = import_module("strip_tokens", "5_strip_tokens.py")
-        tokens_module.main_strip()  # Assuming main function name
+        bigrams_module = import_module("bigrams_trigrams", "5_bigrams_trigrams.py")
+        bigrams_module.main_bigrams_trigrams()
     except Exception as e:
         logger.error(f"Error in Step 5: {e}")
     execution_times["Step 5"] = time.time() - start_time
     logger.info(f"Step 5 completed in {execution_times['Step 5']:.2f} seconds")
 
-    # Step 6: Generate bigrams and trigrams
-    logger.info("Step 6: Generating bigrams and trigrams")
+    # Step 7: Train Word2Vec model
+    logger.info("Step 6: Training Word2Vec model")
     start_time = time.time()
     try:
-        bigrams_module = import_module("bigrams_trigrams", "6_bigrams_trigrams.py")
-        bigrams_module.main_bigrams_trigrams()
+        w2v_module = import_module("w2v_model", "6_w2v_model.py")
+        w2v_module.main_word2vec()
     except Exception as e:
         logger.error(f"Error in Step 6: {e}")
     execution_times["Step 6"] = time.time() - start_time
     logger.info(f"Step 6 completed in {execution_times['Step 6']:.2f} seconds")
 
-    # Step 7: Train Word2Vec model
-    logger.info("Step 7: Training Word2Vec model")
+        # Step 8: Cache Word2Vec similarities with CSO ontology
+    logger.info("Step 7: Caching Word2Vec model with CSO ontology")
     start_time = time.time()
     try:
-        w2v_module = import_module("w2v_model", "7_w2v_model.py")
-        w2v_module.main_word2vec()
+        cache_module = import_module("caching_word2vec_model", "7_caching_word2vec_model.py")
+        cache_module.main()  # assuming you wrap your code in a main() function
     except Exception as e:
         logger.error(f"Error in Step 7: {e}")
     execution_times["Step 7"] = time.time() - start_time
     logger.info(f"Step 7 completed in {execution_times['Step 7']:.2f} seconds")
-
-        # Step 8: Cache Word2Vec similarities with CSO ontology
-    logger.info("Step 8: Caching Word2Vec model with CSO ontology")
-    start_time = time.time()
-    try:
-        cache_module = import_module("caching_word2vec_model", "8_caching_word2vec_model.py")
-        cache_module.main()  # assuming you wrap your code in a main() function
-    except Exception as e:
-        logger.error(f"Error in Step 8: {e}")
-    execution_times["Step 8"] = time.time() - start_time
-    logger.info(f"Step 8 completed in {execution_times['Step 8']:.2f} seconds")
 
 
     # Find and log the step with maximum execution time
