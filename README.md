@@ -26,31 +26,15 @@ Step 1: Download and Preprocess CSO Concepts
   - Remove extra spaces or special characters
   
   - Keep multi-word terms as-is (e.g., "computer science")
-    
 
-Step 2: Download and Preprocess the Paper Dataset
 
-  2.1 Download the full Semantic Scholar Open Research Corpus or a custom dataset.
-  
-  2.2 Parse each paper to extract:
-  
-   - Title
-  
-  - Abstract
-  
-  2.3 Preprocess each document:
-  
-  - Convert text to lowercase
-  
-  - Normalize special characters, punctuation, and whitespace
+Step 2: Concept Matching with NLTK or Gensim
 
-Step 3: Concept Matching with NLTK or Gensim
-
-  3.1 Use CSO concepts as search terms.
+  2.1 Use CSO concepts as search terms.
   
-  3.2 For each paper (title + abstract), search for exact matches of CSO concepts.
+  2.2 For each paper (title + abstract), search for exact matches of CSO concepts.
   
-  3.3 If a match is found:
+  2.3 If a match is found:
 
 - Replace the matched phrase with an underscore-separated version (e.g., "computer science" → "computer_science")
 
@@ -65,39 +49,39 @@ Step 3: Concept Matching with NLTK or Gensim
   - After Replacement:
   "...recent advances in computer_science and large_language_models have improved web search..."
 
-Step 4: Phrase Mining (Optional but Recommended)
+Step 3: Phrase Mining (Optional but Recommended)
 
-  4.1 Extract frequent bigrams and trigrams from the paper dataset using NLTK or Gensim's Phrases module.
+  3.1 Extract frequent bigrams and trigrams from the paper dataset using NLTK or Gensim's Phrases module.
 
-Step 5: Train Embedding Model
+Step 4: Train Embedding Model
 
-  5.1 Use the cleaned and processed paper dataset to train a Word2Vec model using gensim's latest implementation.
+  4.1 Use the cleaned and processed paper dataset to train a Word2Vec model using gensim's latest implementation.
   
-  5.2 The model will learn vector embeddings where similar scientific terms are close in vector space.
+  4.2 The model will learn vector embeddings where similar scientific terms are close in vector space.
 
-Step 6: Load Updated CSO Concepts from CSO Reader
+Step 5: Load Updated CSO Concepts from CSO Reader
 
-  6.1 Load all updated concepts from the CSO Reader utility.
+  5.1 Load all updated concepts from the CSO Reader utility.
 
-Step 7: Extend Word2Vec Model Vocabulary
+Step 6: Extend Word2Vec Model Vocabulary
 
-  7.1 For each word in the model vocabulary:
+  6.1 For each word in the model vocabulary:
   
   - Retrieve semantically similar terms using most_similar() with a similarity threshold.
   
-  7.2 Compare retrieved terms against CSO concepts using Levenshtein similarity (via rapidfuzz).
+  6.2 Compare retrieved terms against CSO concepts using Levenshtein similarity (via rapidfuzz).
   
-  7.3 If similarity exceeds a threshold:
+  6.3 If similarity exceeds a threshold:
   
   - Link the word to relevant CSO concepts
   
   - Cache the result to avoid recomputation
   
-  7.4 Save the final cached model with all matched terms.
+  6.4 Save the final cached model with all matched terms.
 
-Step 8: Topic Modeling or Downstream Tasks
+Step 7: Topic Modeling or Downstream Tasks
 
-  8.1 The final trained Word2Vec model can be used for a range of downstream applications:
+  7.1 The final trained Word2Vec model can be used for a range of downstream applications:
   
   - Topic modeling
    
@@ -195,19 +179,17 @@ Step 8: Topic Modeling or Downstream Tasks
 
 1_cso_script.py: This script extracts concept labels from a CSO (Computer Science Ontology) TTL file using regex pattern matching and stores them in a list. The extracted labels can optionally be saved to a CSV file, with error handling and logging functionality implemented throughout the process.
 
-2_paper_dataset.py: This script processes a dataset of academic papers by loading them from a CSV file, filtering for titles and abstracts, and saving them in both TXT and CSV formats. The script uses pandas for data manipulation and includes logging functionality to track the processing steps and any potential errors that may occur during execution.
+2_dataset_partitions.py: This script partitions a large dataset of academic paper abstracts into smaller chunks while preserving title-abstract pairs. It implements memory-efficient processing by reading and writing data incrementally, with configurable partition sizes. The script handles large files by splitting them into at least 4 parts based on system memory constraints, with proper logging and preview functionality.
 
-3_dataset_partitions.py: This script partitions a large dataset of academic paper abstracts into smaller chunks while preserving title-abstract pairs. It implements memory-efficient processing by reading and writing data incrementally, with configurable partition sizes. The script handles large files by splitting them into at least 4 parts based on system memory constraints, with proper logging and preview functionality.
+3_clean_data.py: This script processes academic paper abstracts by cleaning text and standardizing space-related topics from CSO (Computer Science Ontology). It reads multiple partition files, replaces space-separated topics with underscore versions (e.g., "machine learning" -> "machine_learning"), and outputs cleaned versions while maintaining a log of transformations performed.
 
-4_clean_data.py: This script processes academic paper abstracts by cleaning text and standardizing space-related topics from CSO (Computer Science Ontology). It reads multiple partition files, replaces space-separated topics with underscore versions (e.g., "machine learning" -> "machine_learning"), and outputs cleaned versions while maintaining a log of transformations performed.
+4_strip_tokens.py: This script processes text files containing paper abstracts by cleaning and tokenizing them. It reads input files from 'paper_dataset' directory, converts text to lowercase, removes punctuation, and saves the tokenized output in JSON format while providing progress logs and sample outputs.
 
-5_strip_tokens.py: This script processes text files containing paper abstracts by cleaning and tokenizing them. It reads input files from 'paper_dataset' directory, converts text to lowercase, removes punctuation, and saves the tokenized output in JSON format while providing progress logs and sample outputs.
+5_bigrams_trigrams.py: This script processes text files to generate bigrams and trigrams using Gensim's Phrases model. It reads input files containing tokenized sentences, creates bigrams and trigrams based on frequency thresholds, and saves the processed n-grams to separate output files while handling errors and logging progress.
 
-6_bigrams_trigrams.py: This script processes text files to generate bigrams and trigrams using Gensim's Phrases model. It reads input files containing tokenized sentences, creates bigrams and trigrams based on frequency thresholds, and saves the processed n-grams to separate output files while handling errors and logging progress.
+6_w2v_model.py: This script trains a Word2Vec model on academic paper abstracts using the skip-gram algorithm. It processes trigram-tokenized sentences from multiple files and generates word embeddings of specified dimensions. The trained model is saved in binary format with configurable parameters like vector size, window size and minimum word count.
 
-7_w2v_model.py: This script trains a Word2Vec model on academic paper abstracts using the skip-gram algorithm. It processes trigram-tokenized sentences from multiple files and generates word embeddings of specified dimensions. The trained model is saved in binary format with configurable parameters like vector size, window size and minimum word count.
-
-8_caching_word2vec_model.py: This script matches terms between Word2Vec model vocabulary and Computer Science Ontology (CSO) topics using semantic and string similarity. The matches are cached to a JSON file for later use in topic classification and recommendation systems.
+7_caching_word2vec_model.py: This script matches terms between Word2Vec model vocabulary and Computer Science Ontology (CSO) topics using semantic and string similarity. The matches are cached to a JSON file for later use in topic classification and recommendation systems.
 
 Pipeline.py - Data Processing Pipeline for Academic Papers Analysis
 
@@ -215,19 +197,17 @@ This Python script implements a comprehensive data processing pipeline for analy
 
    a. CSO Concept Extraction (Step 1)
    
-   b. Paper Dataset Processing (Step 2) 
+   b. Dataset Partitioning (Step 2)
    
-   c. Abstract Partitioning (Step 3)
+   c. Data Cleaning (Step 3)
    
-   d. Data Cleaning (Step 4)
+   d. Token Stripping (Step 4)
    
-   e. Token Stripping (Step 5)
+   e. Bigram/Trigram Generation (Step 5)
    
-   f. Bigram/Trigram Generation (Step 6)
+   f. Word2Vec Model Training (Step 6)
    
-   g. Word2Vec Model Training (Step 7)
-   
-   h. Word2Vec-CSO Similarity Caching (Step 8)
+   g. Word2Vec-CSO Similarity Caching (Step 7)
 
 requirements.txt: All project dependencies (e.g., pandas, langdetect, gensim) required to run the scripts. Use pip install -r requirements.txt to install them.
 
