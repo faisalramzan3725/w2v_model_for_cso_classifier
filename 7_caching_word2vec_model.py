@@ -241,7 +241,7 @@ def main()->None:
     """
 
     # === CONFIGURATION ===
-    model_path = '9M[256-10]_sg.bin'
+    model_path = '264M[256-10]_sg.bin'
     top_n_similar_words = 10
     word2vec_threshold = 0.7
     levenshtein_threshold = 0.90
