@@ -120,12 +120,13 @@ def process_file(input_file: str) -> None:
     total_lines = count_lines_in_file(input_file)
     if total_lines == 0:
         return
-
+    number_of_partitions = 8
     # Calculate chunk size for 4 partitions
-    chunk_size = math.ceil(total_lines / 4)
+    chunk_size = math.ceil(total_lines / number_of_partitions)
+
     
     # Process each chunk without loading the entire file
-    for partition_num in range(1, 5):  # partitions 1-4
+    for partition_num in range(1, 9):  # partitions 1-4
         start_line = (partition_num - 1) * chunk_size
         
         # Don't read beyond the file
@@ -135,7 +136,7 @@ def process_file(input_file: str) -> None:
         # Adjust chunk size for the last partition
         current_chunk_size = min(chunk_size, total_lines - start_line)
         
-        logging.info(f"Processing partition {partition_num}/{4} for file part {file_part}")
+        logging.info(f"Processing partition {partition_num}/{number_of_partitions} for file part {file_part}")
         
         # Read only this chunk
         sentences_chunk = read_file_chunk(input_file, start_line, current_chunk_size)
