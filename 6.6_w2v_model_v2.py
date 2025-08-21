@@ -6,6 +6,41 @@ import os
 from typing import Iterator, List, Optional
 
 from gensim.models import Word2Vec
+"""
+This code implements a Word2Vec model training pipeline with checkpointing capabilities.
+
+Key components:
+
+1. Configuration:
+   - MODEL_NAME: Name identifier for the model
+   - Word2Vec hyperparameters (vector size, window size, min word count, etc.)
+   - Training schedule parameters
+   - I/O paths for data and checkpoints
+
+2. JsonTokensPerLine class:
+   - Streams tokenized sentences from JSONL files
+   - Each line contains a JSON array of tokens
+   - Includes methods for iteration and counting valid examples
+
+3. Manifest Management:
+   - Tracks training progress across files
+   - Allows resuming training from last checkpoint
+   - Functions to load/save training state
+
+4. Core Training Loop (train_with_checkpoints):
+   - Processes multiple input files sequentially
+   - Initializes/updates Word2Vec model vocabulary
+   - Trains on each file for specified epochs
+   - Saves checkpoints after each file
+   - Implements memory management with garbage collection
+   - Saves final word vectors in binary format
+
+The code is designed for:
+- Incremental training on large datasets
+- Fault tolerance through checkpointing
+- Memory efficiency via streaming
+- Progress tracking and logging
+"""
 
 # ======================================================
 # Configuration
@@ -17,10 +52,6 @@ VECTOR_SIZE: int = 256
 WINDOW_SIZE: int = 10
 MIN_COUNT: int = 10
 SG: int = 1                 # 1 = skip-gram, 0 = CBOW
-NEGATIVE: int = 10          # negative sampling (set 0 if using HS)
-HS: int = 0                 # hierarchical softmax (1 to enable, set NEGATIVE=0)
-SAMPLE: float = 1e-3        # subsampling rate for frequent words
-SEED: int = 42
 WORKERS: int = 4
 
 # Training schedule
@@ -104,6 +135,7 @@ def save_manifest(last_completed_index: int) -> None:
 # Core training loop
 # ======================================================
 def train_with_checkpoints() -> None:
+    
     files = sorted(glob.glob(FILE_PATTERN))
     if not files:
         logging.error("No trigram files found. Exiting.")
@@ -133,10 +165,6 @@ def train_with_checkpoints() -> None:
                 min_count=MIN_COUNT,
                 sg=SG,
                 workers=WORKERS,
-                negative=NEGATIVE,
-                hs=HS,
-                sample=SAMPLE,
-                seed=SEED,
                 compute_loss=True,
             )
             model.build_vocab(corpus_iterable=corpus, progress_per=max(1, num_examples // 10))
