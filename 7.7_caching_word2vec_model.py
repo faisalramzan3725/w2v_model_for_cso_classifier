@@ -396,9 +396,9 @@ def main() -> None:
     TOP_N_SIMILAR = 10
     WORD2VEC_SIM_THRESHOLD = 0.70
     LEVENSHTEIN_THRESHOLD = 0.90
-    CHECKPOINT_EVERY = 5000
-    CHECKPOINT_FILE = "checkpoint_v2.json"
-    OUTPUT_FILE = "cached-token-to-cso-combined_v2.json"
+    CHECKPOINT_EVERY = 5000  # change
+    CHECKPOINT_FILE = "checkpoint.json"
+    OUTPUT_FILE = "cached-token-to-cso-combined.json"
 
     if not os.path.exists(model_path):
         raise FileNotFoundError(f"Model file not found: {model_path}")
@@ -435,3 +435,4 @@ if __name__ == "__main__":
     It calls the main function to start the word2vec model caching process.
     """
     main()
+
