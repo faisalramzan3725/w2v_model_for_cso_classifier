@@ -15,7 +15,7 @@ Figure 1: Workflow diagram illustrating the five-step pipeline for creating comp
 
 Step 1: Download and Preprocess CSO Concepts
 
-  1.1 Download the CSO ontology .ttl (Turtle) file, which contains structured computer science concepts.
+  1.1 Download the latest CSO ontology .ttl (Turtle) file, which contains structured computer science concepts (https://cso.kmi.open.ac.uk/downloads).
   
   1.2 Extract all concept labels using an RDF parser (e.g., rdflib in Python).
   
@@ -49,29 +49,23 @@ Step 2: Concept Matching with NLTK or Gensim
   - After Replacement:
   "...recent advances in computer_science and large_language_models have improved web search..."
 
-Step 3: Phrase Mining (Optional but Recommended)
+Step 3: Train Embedding Model
 
-  3.1 Extract frequent bigrams and trigrams from the paper dataset using NLTK or Gensim's Phrases module.
-
-Step 4: Train Embedding Model
-
-  4.1 Use the cleaned and processed paper dataset to train a Word2Vec model using gensim's latest implementation.
+  3.1 Use the cleaned and processed paper dataset to train a Word2Vec model using gensim's latest implementation.
   
-  4.2 The model will learn vector embeddings where similar scientific terms are close in vector space.
+  3.2 The model will learn vector embeddings where similar scientific terms are close in vector space.
 
-Step 5: Load Updated CSO Concepts from CSO Reader
+Step 4: Load Updated CSO Concepts.
 
-  5.1 Load all updated concepts from the CSO Reader utility.
+Step 5: Extend Word2Vec Model Vocabulary
 
-Step 6: Extend Word2Vec Model Vocabulary
-
-  6.1 For each word in the model vocabulary:
+  5.1 For each word in the model vocabulary:
   
   - Retrieve semantically similar terms using most_similar() with a similarity threshold.
   
-  6.2 Compare retrieved terms against CSO concepts using Levenshtein similarity (via rapidfuzz).
+  5.2 Compare retrieved terms against CSO concepts using Levenshtein similarity (via rapidfuzz).
   
-  6.3 If similarity exceeds a threshold:
+  5.3 If similarity exceeds a threshold:
   
   - Link the word to relevant CSO concepts
   
@@ -79,9 +73,9 @@ Step 6: Extend Word2Vec Model Vocabulary
   
   6.4 Save the final cached model with all matched terms.
 
-Step 7: Topic Modeling or Downstream Tasks
+Step 6: Topic Modeling or Downstream Tasks
 
-  7.1 The final trained Word2Vec model can be used for a range of downstream applications:
+  6.1 The final trained Word2Vec model can be used for a range of downstream applications:
   
   - Topic modeling
    
@@ -163,15 +157,15 @@ Step 7: Topic Modeling or Downstream Tasks
 
 📁 cso_label/ # Ontology and extracted concepts
 
-📁 CSO/ # Contains CSO.3.4.1.ttl (ontology file)
+📁 CSO/ # Contains CSO.3.4.1.ttl, CSO.3.5.ttl (ontology file)
 
 - cso_label_counts.csv # Extracted CSO concepts with counts
 
 📁 paper_dataset/ # Paper metadata and processed versions
 
-- paper_dataset.csv # Input dataset (title and abstract)
+- Run the dataset_construction.py script for paper_dataset.txt
 
-- processed_title_abstract_v2.csv # Output after CSO + trigram processing
+- Final Dataset: paper_dataset.txt # Input dataset (title and abstract)
 
 --- 
 
@@ -191,23 +185,6 @@ Step 7: Topic Modeling or Downstream Tasks
 
 7_caching_word2vec_model.py: This script matches terms between Word2Vec model vocabulary and Computer Science Ontology (CSO) topics using semantic and string similarity. The matches are cached to a JSON file for later use in topic classification and recommendation systems.
 
-Pipeline.py - Data Processing Pipeline for Academic Papers Analysis
-
-This Python script implements a comprehensive data processing pipeline for analyzing academic papers. The pipeline consists of 8 main steps:
-
-   a. CSO Concept Extraction (Step 1)
-   
-   b. Dataset Partitioning (Step 2)
-   
-   c. Data Cleaning (Step 3)
-   
-   d. Token Stripping (Step 4)
-   
-   e. Bigram/Trigram Generation (Step 5)
-   
-   f. Word2Vec Model Training (Step 6)
-   
-   g. Word2Vec-CSO Similarity Caching (Step 7)
 
 requirements.txt: All project dependencies (e.g., pandas, langdetect, gensim) required to run the scripts. Use pip install -r requirements.txt to install them.
 
@@ -222,7 +199,7 @@ Dependencies:
 - Visualization: matplotlib
 - Development: jupyter, ipython
 
-The package requires Python 3.11 and is distributed under MIT License.
+Note: The package requires Python 3.11 and gensim==4.3.3.
 
 Author: Faisal Ramzan (faisal.ramzan@unica.it)
 
