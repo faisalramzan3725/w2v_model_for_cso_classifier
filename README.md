@@ -177,12 +177,10 @@ pip install pandas gensim nltk rdflib rapidfuzz tqdm
 ---
 
 ## 🔎 Notes & Tips
-
-- **Exact matching:** Use case‑insensitive exact phrase matching with word boundaries to avoid partial hits.  
-- **Dash normalization:** Normalize Unicode dashes (– — −) to ASCII `-` before matching to preserve hyphenated terms.  
+ 
 - **Checkpoints:** Save model checkpoints periodically to resume after interruptions.  
-- **Thresholds:** Start with cosine ≥ 0.55–0.65 and Levenshtein ≥ 85; tune per corpus.  
-- **Reproducibility:** Set seeds for Gensim and NumPy if deterministic runs are required.
+- **Versions:** python==3.11 and gensim==4.3.3,
+
 
 ---
 
