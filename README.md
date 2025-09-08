@@ -133,6 +133,8 @@ save_json("cache/cached-token-to-cso-combined.json", {k: sorted(v) for k, v in c
 ```
 w2v_model_for_cso_classifier/
 ├─
+  ├─ cso-reader-main/
+
   cso_label/
   ├─ CSO/                         # Place CSO TTLs (e.g., CSO.3.5.ttl)
   └─ cso.csv                      # Extracted CSO concept labels
