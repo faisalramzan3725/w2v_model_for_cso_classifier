@@ -28,7 +28,7 @@ Step 1: Download and Preprocess CSO Concepts
   - Keep multi-word terms as-is (e.g., "computer science")
 
 
-Step 2: Concept Matching with NLTK or Gensim
+Step 2: Concept Matching and Replacing
 
   2.1 Use CSO concepts as search terms.
   
