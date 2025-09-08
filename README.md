@@ -131,19 +131,21 @@ save_json("cache/cached-token-to-cso-combined.json", {k: sorted(v) for k, v in c
 ## 📁 Project Structure (example)
 
 ```
-cso_label/
-├─ CSO/                         # Place CSO TTLs (e.g., CSO.3.5.ttl)
-└─ cso.csv                      # Extracted CSO concept labels
+w2v_model_for_cso_classifier/
+├─
+  cso_label/
+  ├─ CSO/                         # Place CSO TTLs (e.g., CSO.3.5.ttl)
+  └─ cso.csv                      # Extracted CSO concept labels
+  
+  paper_dataset/                  # Downloaded & processed papers (partitions)
+  ├─ part_000.txt
+  ├─ part_001.txt
+  └─ ...
+  
+  notebooks/
+  └─ dataset_construction.ipynb   # Download + English-only filtering
 
-paper_dataset/                  # Downloaded & processed papers (partitions)
-├─ part_000.txt
-├─ part_001.txt
-└─ ...
 
-notebooks/
-└─ dataset_construction.ipynb   # Download + English-only filtering
-
-scripts/
 ├─ 1_cso_script.py              # Extract CSO labels from TTL → CSV
 ├─ 2_dataset_partitions.py      # Split dataset into partitions
 ├─ 3_clean_data.py              # Clean texts + CSO underscore replacements
@@ -151,13 +153,12 @@ scripts/
 ├─ 5_bigrams_trigrams.py        # Build bigrams/trigrams (Gensim)
 ├─ 6_w2v_model.py               # Train Word2Vec with checkpoints
 └─ 7_caching_word2vec_model.py  # Cache vocab ↔ CSO matches via similarity
-
-models/
-└─ 264M_model.bin               # Trained Word2Vec model (example)
-
-cache/
-├─ token-to-cso-combined.json
-└─ cached-token-to-cso-combined.json
+  
+  models/
+  └─ 264M_model.bin               # Trained Word2Vec model 
+  
+  cache/
+  └─ cached-token-to-cso-combined.json
 
 README.md
 ```
