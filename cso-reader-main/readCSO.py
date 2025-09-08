@@ -1,4 +1,5 @@
-from cso_reader import Ontology
+#from cso_reader import Ontology
+from cso_reader.ontology import Ontology
 
 
 ont = Ontology()
