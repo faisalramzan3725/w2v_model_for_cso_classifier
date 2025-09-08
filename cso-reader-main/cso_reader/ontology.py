@@ -6,8 +6,12 @@ import json
 from collections import deque
 import difflib
 
-from config import Config
-from misc import print_header, download_file
+try:
+    from .config import Config
+    from .misc import print_header, download_file
+except ImportError:
+    from config import Config
+    from misc import print_header, download_file
 
 
 class Ontology:
